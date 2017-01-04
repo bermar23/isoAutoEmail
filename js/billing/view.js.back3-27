@@ -1,0 +1,87 @@
+/*
+ * @author: Shiela
+ * @description: location: js/billing/view.js
+ */
+
+jQuery(document).ready(function($) {
+	
+	//-- populate list  --//
+
+	$('tbody', '#woinv-table').remove();
+	document.getElementById('toggle-div').style.display='block';
+	var target = document.getElementById('wrapper');
+	var spinner = new Spinner(opts).spin(target);  
+	
+	$.ajax({
+		type : 'POST',
+		url : 'view_billing/populate_wo',
+		success : function(html) {
+			spinner.stop();
+			document.getElementById('toggle-div').style.display='none';
+			$('#woinv-table').append(html);
+			$('#woinv-table').dataTable();	
+		}
+	});
+	
+	$('#nav-tab a[href="#woinv"]').click(function (e) {	
+		
+		
+			$('tbody', '#woinv-table').remove();
+			document.getElementById('toggle-div').style.display='block';
+			var target = document.getElementById('wrapper');
+			var spinner = new Spinner(opts).spin(target);  
+			
+			$.ajax({
+				type : 'POST',
+				url : 'view_billing/populate_wo',
+				success : function(html) {
+					spinner.stop();
+					document.getElementById('toggle-div').style.display='none';
+					$('#woinv-table').append(html);
+					$('#woinv-table').dataTable();	
+				}
+			});
+		
+	});
+		
+	$('#nav-tab a[href="#winv"]').click(function (e) {
+		
+		$('tbody', '#winv-table').remove();
+		document.getElementById('toggle-div').style.display='block';
+		var target = document.getElementById('wrapper');
+		var spinner = new Spinner(opts).spin(target); 
+			
+			$.ajax({
+				type : 'POST',
+				url : 'view_billing/populate_wi',
+				success : function(html) {
+					spinner.stop();
+					document.getElementById('toggle-div').style.display='none';
+					$('#winv-table').append(html);
+					$('#winv-table').dataTable();
+				}
+		});
+		
+	});
+	
+	// -- hover -- //
+	
+	
+	$(document).on('change', '.status', function(){
+		var id = $(this).parent().parent().find('.id').val();
+		var status = $(this).val();
+		
+		$.ajax({
+			type: 'POST',
+			data: {'id': id, 'status': status},
+			url: 'view_billing/update_status',
+			success: function() {
+				alert('Status Updated');
+			},
+			error: function() {
+				alert('Status Update Error');
+			}
+		});
+		
+	});
+});
